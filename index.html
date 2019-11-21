@@ -3,13 +3,55 @@
 <head>
 	<meta charset="UTF-8">
 	<title>homework2</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 	<script src="js/d3.js"></script>
 	
 </head>
 <body>
-	<div id='svg1'>
-		
+
+	<div style="height: 700px; width: 700px;float:right;">
+		<div align="center">
+			
+			<div>
+				<input type="range" οninput="getVal(this.value)" οnchange="getVal(this.value)">
+				<text id="Fk_k_show">0.0001</text>	
+				<script>
+					var getVal = function(e){
+						d3.select("#Fk_k_show").text(e);
+					}
+
+				</script>
+			</div>
+
+			<div id='svg1' align="center">
+			
+			</div>
+
+		</div>
+
 	</div>
+
+
+	<div style="height: 700px; width: 700px;float:left;">
+		<div align="center">
+
+		<select id="order">
+		  <option value="name">by Name</option>
+		  <option value="count">by Frequency</option>
+		  <option value="group">by Cluster</option>
+		</select>
+
+		<div id='svg2' align="center">
+		</div>
+
+
+		</div>
+
+	</div>
+
+
 	<script src="js/charts.js"></script>
+
+	<script src="js/test_matrix.js"></script>
 </body>
 </html>
