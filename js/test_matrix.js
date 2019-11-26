@@ -162,15 +162,18 @@ function draw_matrix()
               matrix_svg.selectAll(".cell")
                 .transition()
                 .attr("fill",function(dd){
+                  if (dd.x == d.x && dd.y == d.y) {
+                    choose_nodes.add(dd.x);
+                  }
                   if (dd.x == d.x && dd.x != dd.y) {
                     // console.log(dd.x);
-                    choose_nodes.add(dd.x);
+                    // choose_nodes.add(dd.x);
                     return "red";
 
                   }
-                  if (dd.y == d.y && dd.x != dd.y) {
+                  else if (dd.y == d.y && dd.x != dd.y) {
                     // console.log(dd.x);
-                    choose_nodes.add(dd.x);
+                    // choose_nodes.add(dd.x);
                     return "red";
 
                   }
