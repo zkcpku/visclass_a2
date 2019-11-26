@@ -71,6 +71,8 @@ function draw_matrix()
       matrix[i][i].z = 1;
     }
 
+    // console.log(matrix);
+
     // Precompute the orders.
     var orders = {
       name: d3.range(n).sort(function(a, b) { return nodes[a].id - nodes[b].id;}),//d3.ascending(nodes[a].name, nodes[b].name);
@@ -160,7 +162,13 @@ function draw_matrix()
               matrix_svg.selectAll(".cell")
                 .transition()
                 .attr("fill",function(dd){
-                  if (dd.x == d.x && dd.x != dd.y && dd.y == d.y) {
+                  if (dd.x == d.x && dd.x != dd.y) {
+                    // console.log(dd.x);
+                    choose_nodes.add(dd.x);
+                    return "red";
+
+                  }
+                  if (dd.y == d.y && dd.x != dd.y) {
                     // console.log(dd.x);
                     choose_nodes.add(dd.x);
                     return "red";
@@ -229,13 +237,13 @@ function draw_matrix()
               .transition()
               .attr("stroke",function(dd){
                 // console.log(d);
-                if (choose_nodes.has(parseInt(dd.source))) {
+                if (choose_nodes.has(parseInt(dd.source)) && choose_nodes.has(parseInt(dd.target))) {
                   return 'rgb(254,156,21)';
                 }
-                else if(choose_nodes.has(parseInt(dd.target))){
-                  return 'rgb(254,156,21)';
+                // else if(choose_nodes.has(parseInt(dd.target))){
+                //   return 'rgb(254,156,21)';
 
-                }
+                // }
                 else{
                   return 'grey';
                 }

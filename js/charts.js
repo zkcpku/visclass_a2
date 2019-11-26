@@ -9,6 +9,9 @@ var STROKE_WIDTH = 1;
 var NODE_OPACITY = 0.5;
 var LINE_OPACITY = 0.2;
 var svg;
+// var F_ks = ({Fe_k:100, Fk_k:0.0001, Fb_k:100});
+var F_ks = ({Fe_k:10, Fk_k:0.0001, Fb_k:0.1 * 256});
+var F_ks_origin = ({Fe_k:10, Fk_k:0.0001, Fb_k:0.1 * 256});
 // console.log("start")
 function data2list(data){
     // console.log(data);
@@ -223,7 +226,7 @@ function move2center(){
     
 }
 
-function train(Fk_k = 0.0001,Fe_k = 10,decay = 0.5,max_step = 400,draw_step = 10,dt = 1,max_dx = 10,min_gap = 2){
+function train(ks = F_ks,decay = 0.5,max_step = 400,draw_step = 10,dt = 1,max_dx = 10,min_gap = 2){
     var step = 0;
     function loop(){
         
@@ -232,7 +235,7 @@ function train(Fk_k = 0.0001,Fe_k = 10,decay = 0.5,max_step = 400,draw_step = 10
         // console.log(step);
         if (step > max_step) {return;}
         for (var i = 0; i < nodes.length; i++) {
-            var tmp_Fb = Fborder(nodes[i]);
+            var tmp_Fb = Fborder(nodes[i],ks.Fb_k);
             nodes[i].Fx = tmp_Fb[0];
             nodes[i].Fy = tmp_Fb[1];
         }
@@ -240,7 +243,7 @@ function train(Fk_k = 0.0001,Fe_k = 10,decay = 0.5,max_step = 400,draw_step = 10
         for (var i = 0; i < nodes.length; i++) {
             var max_Fe = 0;
             for (var j = i + 1; j < nodes.length; j++) {
-                var tmp_Fe = Fe(nodes[i],nodes[j],Fe_k);
+                var tmp_Fe = Fe(nodes[i],nodes[j],ks.Fe_k);
                 nodes[i].Fx += tmp_Fe[0];
                 nodes[i].Fy += tmp_Fe[1];
                 nodes[j].Fx -= tmp_Fe[0];
@@ -253,7 +256,7 @@ function train(Fk_k = 0.0001,Fe_k = 10,decay = 0.5,max_step = 400,draw_step = 10
             // console.log(max_Fe);
             var max_Fk = 0;
             for (var j = 0; j < nodes[i].toNodes.length; j++) {
-                var tmp_Fk = Fk(nodes[i],nodes[nodes[i].toNodes[j]],Fk_k);
+                var tmp_Fk = Fk(nodes[i],nodes[nodes[i].toNodes[j]],ks.Fk_k);
                 max_Fk = Math.max(tmp_Fk[0],max_Fk);
                 max_Fk = Math.max(tmp_Fk[1],max_Fk);
 
@@ -390,6 +393,11 @@ function addDrag(){
     svg.selectAll("circle").call(drag);
 }
 
+
+function getVal_pull(d){
+    // console.log(d);
+    console.log("debug");
+}
 d3.json('data/add_matrix_change_jazz.json').then(function(data)
 {   
 

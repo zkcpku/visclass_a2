@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>homework2</title>
+	<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
 	<script src="js/d3.js"></script>
 	
@@ -13,15 +14,42 @@
 		<div align="center">
 			
 			<div>
-				<input type="range" οninput="getVal(this.value)" οnchange="getVal(this.value)">
-				<text id="Fk_k_show">0.0001</text>	
-				<script>
-					var getVal = function(e){
-						d3.select("#Fk_k_show").text(e);
-					}
-
-				</script>
+				拉力倍率：<span id="pull_text">1</span><input id="pull" type="range" max=80 min=20>
+				斥力：<span id="push_text">1</span><input id="push" type="range" max=80 min=20>
+				<!-- 边界斥力：<input id="border" type="range" οninput="getVal_border()" οnchange="getVal_border()"> -->
 			</div>
+			<script type="text/javascript">
+				$("#pull").on("change",function(){
+					// console.log(d);
+					d = $("#pull").val();
+					// console.log(Math.ceil(d / 10) * 10);
+					d = Math.ceil(d / 10) * 10;
+					factor = d - 50;
+					factor = factor / 5;
+					factor = Math.pow(2,factor);
+					// console.log(d % 10 * 10);
+					$("#pull").val(d);
+					$("#pull_text").text(factor);
+					F_ks.Fk_k = F_ks_origin.Fk_k * factor;
+					// console.log(F_ks);
+					train();
+				})
+				$("#push").on("change",function(){
+					// console.log(d);
+					d = $("#push").val();
+					// console.log(Math.ceil(d / 10) * 10);
+					d = Math.ceil(d / 10) * 10;
+					factor = d - 50;
+					factor = factor / 5;
+					factor = Math.pow(2,factor);
+					// console.log(d % 10 * 10);
+					$("#push").val(d);
+					$("#push_text").text(factor);
+					F_ks.Fe_k = F_ks_origin.Fe_k * factor;
+					// console.log(F_ks);
+					train();
+				})
+			</script>
 
 			<div id='svg1' align="center">
 			
@@ -34,8 +62,7 @@
 
 	<div style="height: 700px; width: 700px;float:left;">
 		<div align="center">
-
-		<select id="order">
+		排序方式：<select id="order">
 		  <option value="name">by Name</option>
 		  <option value="count">by Frequency</option>
 		  <option value="group">by Cluster</option>
